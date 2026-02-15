@@ -53,6 +53,7 @@ module Secretariat
     :direct_debit_creditor_id, # BT-90
     :direct_debit_iban, # BT-91,
     :subject_code, # BT-21
+    :rounding_amount, # BT-114
     keyword_init: true
   ) do
 
@@ -350,6 +351,7 @@ module Secretariat
                 Helpers.currency_element(xml, 'ram', 'GrandTotalAmount', grand_total_amount, currency_code, add_currency: version == 1)
                 Helpers.currency_element(xml, 'ram', 'TotalPrepaidAmount', paid_amount, currency_code, add_currency: version == 1)
                 Helpers.currency_element(xml, 'ram', 'DuePayableAmount', due_amount, currency_code, add_currency: version == 1)
+                Helpers.currency_element(xml, 'ram', 'RoundingAmount', rounding_amount, currency_code, add_currency: version == 1) unless rounding_amount.blank?
               end
             end
             if version == 1
