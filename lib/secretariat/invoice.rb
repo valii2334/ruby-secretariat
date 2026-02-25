@@ -98,8 +98,8 @@ module Secretariat
           taxes['0'].base_amount += BigDecimal(line_item.net_amount) * line_item.billed_quantity
         else
           taxes[line_item.tax_percent] = Tax.new(tax_percent: BigDecimal(line_item.tax_percent), tax_category: line_item.tax_category) if taxes[line_item.tax_percent].nil?
-          taxes[line_item.tax_percent].tax_amount += BigDecimal(line_item.tax_amount)
-          taxes[line_item.tax_percent].base_amount += BigDecimal(line_item.net_amount) * line_item.billed_quantity
+          taxes[line_item.tax_percent].tax_amount  += BigDecimal(line_item.tax_amount)
+          taxes[line_item.tax_percent].base_amount += (BigDecimal(line_item.net_amount) * line_item.billed_quantity).round(2)
         end
       end
 
@@ -123,7 +123,7 @@ module Secretariat
       basis = BigDecimal(basis_amount)
       summed_tax_amount = taxes.sum(&:tax_amount).round(2)
       if tax != summed_tax_amount
-        @errors << "Tax amount and summed tax amounts deviate: #{tax_amount} / #{summed_tax_amount}"
+        @errors << "Tax amount and summed tax amounts deviate: #{tax} / #{summed_tax_amount}"
         return false
       end
       summed_tax_base_amount = taxes.sum(&:base_amount).round(2)
